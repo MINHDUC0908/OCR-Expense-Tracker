@@ -1,6 +1,3 @@
-// lib/features/history/presentation/widgets/transaction_card.dart
-// List item card representing an expense transaction with thumbnail and quick details.
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -22,6 +19,10 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasValidImage =
+        transaction.imagePath != null &&
+        File(transaction.imagePath!).existsSync();
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -31,8 +32,7 @@ class TransactionCard extends StatelessWidget {
             // Receipt image thumbnail or category icon
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: transaction.imagePath != null &&
-                      File(transaction.imagePath!).existsSync()
+              child: hasValidImage
                   ? Container(
                       width: 52,
                       height: 52,

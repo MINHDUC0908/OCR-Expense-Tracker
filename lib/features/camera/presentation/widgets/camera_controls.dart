@@ -35,7 +35,7 @@ class CameraControls extends StatelessWidget {
             _CircleIconButton(
               icon: Icons.photo_library_outlined,
               onTap: onGallery,
-              tooltip: 'Gallery',
+              tooltip: 'Thư viện ảnh',
             ),
 
             // Main capture button.
@@ -48,7 +48,7 @@ class CameraControls extends StatelessWidget {
             _CircleIconButton(
               icon: isFlashOn ? Icons.flash_on_rounded : Icons.flash_off_rounded,
               onTap: onFlashToggle,
-              tooltip: isFlashOn ? 'Flash On' : 'Flash Off',
+              tooltip: isFlashOn ? 'Tắt đèn flash' : 'Bật đèn flash',
               activeColor: isFlashOn ? AppColors.warning : null,
             ),
           ],

@@ -1,6 +1,3 @@
-// lib/features/ocr/ocr_service.dart
-// ML Kit Text Recognition wrapper — performs on-device OCR on an image file.
-
 import 'dart:io';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import '../../data/models/parsed_receipt.dart';
@@ -31,7 +28,7 @@ class OcrService {
       final rawText = _buildRawText(recognized);
 
       if (rawText.trim().isEmpty) {
-        return ParsedReceipt(
+        return const ParsedReceipt(
           rawText: '',
           confidence: 0.0,
         );

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -10,6 +11,10 @@ import 'data/repositories/database_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Vietnamese + English locale data for intl date formatting.
+  await initializeDateFormatting('vi', null);
+  await initializeDateFormatting('en', null);
 
   // Initialize the local database before the app starts.
   await DatabaseHelper.instance.database;
@@ -32,7 +37,7 @@ class OcrExpenseTrackerApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'OCR Expense Tracker',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       routerConfig: router,
     );
   }

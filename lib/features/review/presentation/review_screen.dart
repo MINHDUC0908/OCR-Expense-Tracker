@@ -1,5 +1,5 @@
 // lib/features/review/presentation/review_screen.dart
-// Screen for reviewing, verifying, and editing OCR-extracted fields before storing.
+// Màn hình xác nhận, kiểm tra và chỉnh sửa thông tin hóa đơn quét được.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +46,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
     final state = ref.watch(reviewProvider(widget.imagePath));
     final notifier = ref.read(reviewProvider(widget.imagePath).notifier);
 
-    // Sync controllers when OCR completes
+    // Đồng bộ controller khi nhận diện OCR xong
     ref.listen(reviewProvider(widget.imagePath), (prev, next) {
       if (prev?.isOcrLoading == true && !next.isOcrLoading) {
         if (_amountController.text.isEmpty && next.amount > 0) {
@@ -60,7 +60,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Review Receipt'),
+        title: const Text('Xác nhận hóa đơn'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => context.pop(),
@@ -74,7 +74,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                   CircularProgressIndicator(color: AppColors.primary),
                   SizedBox(height: 20),
                   Text(
-                    'Extracting receipt data on-device...',
+                    'Đang trích xuất dữ liệu hóa đơn...',
                     style: AppTextStyles.bodyMedium,
                   ),
                 ],
@@ -85,7 +85,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Receipt Image + OCR Inspection View
+                  // Xem ảnh hóa đơn + dữ liệu OCR
                   ReceiptImageViewer(
                     imagePath: state.imagePath,
                     rawText: state.parsedReceipt?.rawText ?? '',
@@ -94,24 +94,24 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
                   const SizedBox(height: 24),
 
-                  // Total Amount Input
+                  // Nhập tổng tiền
                   EditableFieldCard(
-                    label: 'TOTAL AMOUNT (VND)',
+                    label: 'TỔNG SỐ TIỀN (VNĐ)',
                     icon: Icons.payments_outlined,
                     helperText: state.amount > 0
-                        ? 'Formatted: ${CurrencyFormatter.formatVnd(state.amount)}'
-                        : 'Enter the final sum paid',
+                        ? 'Định dạng: ${CurrencyFormatter.formatVnd(state.amount)}'
+                        : 'Nhập số tiền đã thanh toán',
                     child: TextField(
                       controller: _amountController,
                       keyboardType: TextInputType.number,
                       style: AppTextStyles.titleMedium.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w700,
-                        fontSize: 20,
+                        fontSize: 22,
                       ),
                       decoration: const InputDecoration(
                         hintText: '0',
-                        suffixText: 'VND',
+                        suffixText: 'VNĐ',
                       ),
                       onChanged: (val) {
                         final parsed = double.tryParse(val.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0.0;
@@ -122,15 +122,15 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
                   const SizedBox(height: 18),
 
-                  // Merchant Name Input
+                  // Nhập tên nơi bán / cửa hàng
                   EditableFieldCard(
-                    label: 'MERCHANT / STORE NAME',
+                    label: 'TÊN CỬA HÀNG / DỊCH VỤ',
                     icon: Icons.storefront_outlined,
                     child: TextField(
                       controller: _merchantController,
                       style: AppTextStyles.bodyLarge,
                       decoration: const InputDecoration(
-                        hintText: 'e.g. Highlands Coffee',
+                        hintText: 'VD: Highlands Coffee, Siêu thị WinMart...',
                       ),
                       onChanged: notifier.updateMerchant,
                     ),
@@ -138,9 +138,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
                   const SizedBox(height: 18),
 
-                  // Transaction Date Selector
+                  // Chọn ngày giao dịch
                   EditableFieldCard(
-                    label: 'TRANSACTION DATE',
+                    label: 'NGÀY GIAO DỊCH',
                     icon: Icons.calendar_today_outlined,
                     child: InkWell(
                       onTap: () async {
@@ -152,9 +152,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                           builder: (context, child) {
                             return Theme(
                               data: Theme.of(context).copyWith(
-                                colorScheme: const ColorScheme.dark(
+                                colorScheme: const ColorScheme.light(
                                   primary: AppColors.primary,
-                                  onPrimary: AppColors.background,
+                                  onPrimary: Colors.white,
                                   surface: AppColors.surface,
                                   onSurface: AppColors.textPrimary,
                                 ),
@@ -167,12 +167,12 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                           notifier.updateDate(picked);
                         }
                       },
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         decoration: BoxDecoration(
                           color: AppColors.surfaceVariant,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppColors.border),
                         ),
                         child: Row(
@@ -191,9 +191,9 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
                   const SizedBox(height: 18),
 
-                  // Expense Category Selection
+                  // Chọn danh mục chi tiêu
                   EditableFieldCard(
-                    label: 'CATEGORY',
+                    label: 'DANH MỤC CHI TIÊU',
                     icon: Icons.category_outlined,
                     child: Wrap(
                       spacing: 8,
@@ -204,14 +204,14 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                           avatar: Text(cat.emoji, style: const TextStyle(fontSize: 14)),
                           label: Text(cat.displayName),
                           selected: isSelected,
-                          selectedColor: cat.color.withValues(alpha: 0.25),
+                          selectedColor: cat.color.withValues(alpha: 0.22),
                           side: BorderSide(
                             color: isSelected ? cat.color : AppColors.border,
                             width: isSelected ? 1.5 : 1,
                           ),
                           labelStyle: TextStyle(
                             color: isSelected ? cat.color : AppColors.textSecondary,
-                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                           ),
                           onSelected: (_) => notifier.updateCategory(cat),
                         );
@@ -221,7 +221,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
 
                   const SizedBox(height: 36),
 
-                  // Action Buttons
+                  // Nút hành động
                   ElevatedButton.icon(
                     onPressed: state.isSaving
                         ? null
@@ -230,7 +230,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                             if (success && context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Expense saved successfully!'),
+                                  content: Text('Đã lưu chi tiêu thành công!'),
                                   backgroundColor: AppColors.success,
                                 ),
                               );
@@ -241,17 +241,17 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                         ? const SizedBox(
                             width: 20,
                             height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.background),
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                           )
                         : const Icon(Icons.check_circle_outline_rounded),
-                    label: Text(state.isSaving ? 'Saving...' : 'Save Expense'),
+                    label: Text(state.isSaving ? 'Đang lưu...' : 'Lưu chi tiêu'),
                   ),
 
                   const SizedBox(height: 12),
 
                   OutlinedButton(
                     onPressed: state.isSaving ? null : () => context.pop(),
-                    child: const Text('Discard'),
+                    child: const Text('Hủy bỏ'),
                   ),
 
                   const SizedBox(height: 24),

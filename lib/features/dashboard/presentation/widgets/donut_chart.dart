@@ -110,7 +110,7 @@ class _DonutChartState extends State<DonutChart>
         height: 240,
         alignment: Alignment.center,
         child: Text(
-          'No expense data for this period',
+          'Chưa có dữ liệu chi tiêu',
           style: AppTextStyles.bodyMedium,
         ),
       );
@@ -130,7 +130,7 @@ class _DonutChartState extends State<DonutChart>
                   return Stack(
                     alignment: Alignment.center,
                     children: [
-                      CustomPaint(
+                       CustomPaint(
                         size: Size(chartSize, chartSize),
                         painter: _DonutChartPainter(
                           data: widget.data,
@@ -146,7 +146,7 @@ class _DonutChartState extends State<DonutChart>
                           Text(
                             _selectedIndex != null
                                 ? widget.data[_selectedIndex!].category.displayName
-                                : 'Total Spent',
+                                : 'Tổng chi',
                             style: AppTextStyles.labelSmall.copyWith(
                               color: _selectedIndex != null
                                   ? widget.data[_selectedIndex!].category.color

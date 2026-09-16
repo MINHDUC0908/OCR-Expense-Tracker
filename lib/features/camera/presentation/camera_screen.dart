@@ -1,13 +1,10 @@
-// lib/features/camera/presentation/camera_screen.dart
-// Full-screen camera viewfinder with overlay, flash, tap-to-focus, and capture.
-
-import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
@@ -89,7 +86,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
                 ),
                 const Expanded(
                   child: Text(
-                    'Scan Receipt',
+                    'Quét hóa đơn',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -110,7 +107,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
           child: Padding(
             padding: const EdgeInsets.only(top: 380),
             child: Text(
-              'Align receipt within the frame',
+              'Đặt hóa đơn ngay ngắn trong khung',
               style: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
             ),
           ),
@@ -134,20 +131,21 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
   }
 
   Widget _buildErrorView(String message) {
+    final isPermissionError = message.toLowerCase().contains('permission');
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.camera_alt_outlined,
+            Icon(
+              isPermissionError ? Icons.no_photography_rounded : Icons.camera_alt_outlined,
               color: AppColors.textSecondary,
               size: 64,
             ),
             const SizedBox(height: 16),
             Text(
-              'Camera Unavailable',
+              isPermissionError ? 'Cần cấp quyền Camera' : 'Camera không khả dụng',
               style: AppTextStyles.headlineSmall,
             ),
             const SizedBox(height: 8),
@@ -155,6 +153,24 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
               message,
               style: AppTextStyles.bodyMedium,
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            if (isPermissionError) ...[
+              ElevatedButton.icon(
+                onPressed: () async {
+                  await openAppSettings();
+                },
+                icon: const Icon(Icons.settings_rounded),
+                label: const Text('Mở Cài đặt'),
+              ),
+              const SizedBox(height: 12),
+            ],
+            OutlinedButton.icon(
+              onPressed: () {
+                ref.invalidate(cameraNotifierProvider);
+              },
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('Thử lại'),
             ),
           ],
         ),
@@ -213,16 +229,16 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
       aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 4),
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle: 'Crop Receipt',
+          toolbarTitle: 'Cắt hóa đơn',
           toolbarColor: AppColors.surface,
           toolbarWidgetColor: Colors.white,
           activeControlsWidgetColor: AppColors.primary,
-          initAspectRatio: CropAspectRatioPreset.ratio3x4,
+          initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false,
           backgroundColor: Colors.black,
         ),
         IOSUiSettings(
-          title: 'Crop Receipt',
+          title: 'Cắt hóa đơn',
           aspectRatioLockEnabled: false,
         ),
       ],

@@ -1,5 +1,5 @@
 // lib/features/dashboard/presentation/widgets/summary_card.dart
-// Top statistics summary card with total spending, month total, and receipt counter.
+// Thẻ thống kê tổng quan với dải màu nhiệt đới tươi sáng.
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -24,45 +24,72 @@ class SummaryCard extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF003D30),
-            AppColors.surfaceVariant,
+            AppColors.primary,
+            AppColors.primaryContainer,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: 0.28),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'THIS MONTH SPENDING',
-                style: AppTextStyles.labelSmall.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.0,
-                ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.trending_up_rounded,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'CHI TIÊU THÁNG NÀY',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: Colors.white.withValues(alpha: 0.95),
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.1,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: AppColors.surface,
+                  color: Colors.white.withValues(alpha: 0.22),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.border),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.receipt_long_rounded, size: 14, color: AppColors.textSecondary),
+                    const Icon(Icons.receipt_long_rounded, size: 14, color: Colors.white),
                     const SizedBox(width: 4),
                     Text(
-                      '$transactionCount receipts',
-                      style: AppTextStyles.bodySmall.copyWith(fontSize: 11),
+                      '$transactionCount hóa đơn',
+                      style: AppTextStyles.bodySmall.copyWith(
+                        fontSize: 11,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -70,30 +97,38 @@ class SummaryCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 14),
 
           // Big Month Total
           Text(
             CurrencyFormatter.formatVnd(monthTotal),
-            style: AppTextStyles.amountLarge.copyWith(fontSize: 32),
+            style: AppTextStyles.amountLarge.copyWith(
+              fontSize: 34,
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+            ),
           ),
 
           const SizedBox(height: 16),
-          const Divider(color: AppColors.divider),
-          const SizedBox(height: 12),
+          Divider(color: Colors.white.withValues(alpha: 0.25), height: 1),
+          const SizedBox(height: 14),
 
           // Sub-row: Grand Total
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'All-Time Total:',
-                style: AppTextStyles.bodyMedium,
+                'Tổng chi từ trước đến nay:',
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: Colors.white.withValues(alpha: 0.85),
+                  fontSize: 13,
+                ),
               ),
               Text(
                 CurrencyFormatter.formatVnd(grandTotal),
                 style: AppTextStyles.titleMedium.copyWith(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
                 ),
               ),
             ],

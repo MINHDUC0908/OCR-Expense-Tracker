@@ -1,6 +1,3 @@
-// lib/features/review/presentation/widgets/receipt_image_viewer.dart
-// Interactive receipt image preview with raw text toggle for verification.
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -27,6 +24,10 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
 
   @override
   Widget build(BuildContext context) {
+    final hasValidFile =
+        widget.imagePath.isNotEmpty &&
+        File(widget.imagePath).existsSync();
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -56,7 +57,7 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'OCR Confidence: ${(widget.confidence * 100).toInt()}%',
+                      'Độ tin cậy OCR: ${(widget.confidence * 100).toInt()}%',
                       style: AppTextStyles.labelSmall.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
@@ -74,7 +75,7 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                     _showRawText ? Icons.image_rounded : Icons.text_snippet_rounded,
                     size: 16,
                   ),
-                  label: Text(_showRawText ? 'Show Image' : 'OCR Text'),
+                  label: Text(_showRawText ? 'Xem ảnh' : 'Văn bản OCR'),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     minimumSize: Size.zero,
@@ -91,7 +92,7 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
             crossFadeState: _showRawText
                 ? CrossFadeState.showSecond
                 : CrossFadeState.showFirst,
-            firstChild: widget.imagePath.isNotEmpty && File(widget.imagePath).existsSync()
+            firstChild: hasValidFile
                 ? Container(
                     height: 220,
                     width: double.infinity,
@@ -108,7 +109,7 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                     height: 160,
                     color: AppColors.surfaceVariant,
                     alignment: Alignment.center,
-                    child: const Text('No image preview'),
+                    child: const Text('Không có ảnh xem trước'),
                   ),
             secondChild: Container(
               height: 220,
@@ -119,7 +120,7 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                 child: SelectableText(
                   widget.rawText.isNotEmpty
                       ? widget.rawText
-                      : 'No text was recognized from this image.',
+                      : 'Không nhận diện được văn bản nào từ ảnh này.',
                   style: const TextStyle(
                     fontFamily: 'monospace',
                     fontSize: 12,

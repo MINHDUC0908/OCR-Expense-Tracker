@@ -1,5 +1,5 @@
 // lib/features/history/presentation/history_screen.dart
-// History screen displaying all captured expenses with search, category filtering, and delete.
+// Màn hình Lịch sử chi tiêu bằng tiếng Việt
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,12 +19,14 @@ class HistoryScreen extends ConsumerWidget {
     final notifier = ref.read(historyProvider.notifier);
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Expense History'),
+        backgroundColor: AppColors.background,
+        title: const Text('Lịch sử chi tiêu'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
-            tooltip: 'Refresh',
+            tooltip: 'Làm mới',
             onPressed: () => notifier.refresh(),
           ),
         ],
@@ -34,13 +36,14 @@ class HistoryScreen extends ConsumerWidget {
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (error, _) => Center(
-          child: Text('Error loading history: $error'),
+          child: Text('Lỗi tải lịch sử: $error'),
         ),
         data: (state) {
           return Column(
             children: [
-              // Search & Filter Header
-              Padding(
+              // Thanh tìm kiếm & lọc
+              Container(
+                color: AppColors.background,
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: FilterBar(
                   selectedCategory: state.filter.selectedCategory,
@@ -49,40 +52,53 @@ class HistoryScreen extends ConsumerWidget {
                 ),
               ),
 
-              const Divider(),
+              Container(
+                height: 1,
+                color: AppColors.divider,
+              ),
 
-              // Transaction List
+              // Danh sách giao dịch
               Expanded(
                 child: state.filteredTransactions.isEmpty
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.receipt_outlined,
-                              size: 56,
-                              color: AppColors.textDisabled,
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              'No transactions found',
-                              style: AppTextStyles.titleMedium.copyWith(
-                                color: AppColors.textSecondary,
+                            Container(
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryContainer,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.receipt_outlined,
+                                size: 48,
+                                color: AppColors.primary,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Không tìm thấy giao dịch',
+                              style: AppTextStyles.titleMedium.copyWith(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
                             Text(
                               state.filter.selectedCategory != null ||
                                       state.filter.searchQuery.isNotEmpty
-                                  ? 'Try changing the filters'
-                                  : 'Scan your first receipt to get started',
-                              style: AppTextStyles.bodySmall,
+                                  ? 'Thử thay đổi bộ lọc'
+                                  : 'Quét hóa đơn đầu tiên để bắt đầu',
+                              style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.textSecondary),
                             ),
                           ],
                         ),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
                         itemCount: state.filteredTransactions.length,
                         itemBuilder: (context, index) {
                           final tx = state.filteredTransactions[index];
@@ -92,22 +108,26 @@ class HistoryScreen extends ConsumerWidget {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (ctx) => AlertDialog(
-                                  backgroundColor: AppColors.surface,
-                                  title: const Text('Delete Expense?'),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  title: const Text('Xoá chi tiêu?'),
                                   content: Text(
-                                    'Are you sure you want to remove ${tx.merchantName}?',
+                                    'Bạn có chắc muốn xoá "${tx.merchantName}" không?',
                                   ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () => Navigator.pop(ctx, false),
-                                      child: const Text('Cancel'),
+                                      onPressed: () =>
+                                          Navigator.pop(ctx, false),
+                                      child: const Text('Huỷ'),
                                     ),
                                     TextButton(
-                                      onPressed: () => Navigator.pop(ctx, true),
+                                      onPressed: () =>
+                                          Navigator.pop(ctx, true),
                                       style: TextButton.styleFrom(
                                         foregroundColor: AppColors.error,
                                       ),
-                                      child: const Text('Delete'),
+                                      child: const Text('Xoá'),
                                     ),
                                   ],
                                 ),

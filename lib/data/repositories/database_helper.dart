@@ -61,10 +61,6 @@ class DatabaseHelper {
   /// Handles schema migrations for future versions.
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     // Future migration logic goes here.
-    // Example:
-    // if (oldVersion < 2) {
-    //   await db.execute('ALTER TABLE transactions ADD COLUMN notes TEXT');
-    // }
   }
 
   /// Closes the database connection. Call on app teardown if needed.

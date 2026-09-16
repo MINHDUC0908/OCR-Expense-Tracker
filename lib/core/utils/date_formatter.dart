@@ -6,11 +6,15 @@ import 'package:intl/intl.dart';
 class DateFormatter {
   DateFormatter._();
 
-  static final DateFormat _displayFormat = DateFormat('dd MMM yyyy', 'vi');
+  // Use 'en' locale (always available) for display.
+  // Vietnamese month/day names are provided manually.
+  static final DateFormat _displayFormat = DateFormat('dd MMM yyyy');
   static final DateFormat _shortFormat = DateFormat('dd/MM/yyyy');
   static final DateFormat _dbFormat = DateFormat('yyyy-MM-dd');
-  static final DateFormat _monthYearFormat = DateFormat('MMM yyyy', 'vi');
-  static final DateFormat _dayFormat = DateFormat('EEE', 'vi');
+  static final DateFormat _monthYearFormat = DateFormat('MMM yyyy');
+
+  // Short weekday abbreviations (Mon-Sun in Vietnamese)
+  static const _viWeekdays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
   /// Formats [date] for display: e.g. "11 Sep 2026"
   static String display(DateTime date) => _displayFormat.format(date);
@@ -27,8 +31,11 @@ class DateFormatter {
   /// Formats [date] as month-year: "Sep 2026"
   static String monthYear(DateTime date) => _monthYearFormat.format(date);
 
-  /// Short weekday abbreviation for bar chart labels: "Mon", "Tue", ...
-  static String weekday(DateTime date) => _dayFormat.format(date);
+  /// Short weekday abbreviation for bar chart labels: "T2", "T3", ..., "CN"
+  static String weekday(DateTime date) {
+    // weekday: 1=Mon, 7=Sun
+    return _viWeekdays[date.weekday - 1];
+  }
 
   /// Returns the start of the week (Monday) for the given [date].
   static DateTime startOfWeek(DateTime date) {

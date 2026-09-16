@@ -2,8 +2,10 @@
 // Riverpod providers for camera lifecycle management.
 
 import 'dart:async';
+import 'dart:ui';
 import 'package:camera/camera.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// State held by [CameraNotifier].
 class CameraState {
@@ -48,10 +50,24 @@ class CameraNotifier extends AsyncNotifier<CameraState> {
 
   @override
   Future<CameraState> build() async {
+    // Request camera permission first.
+    final status = await Permission.camera.request();
+    if (!status.isGranted) {
+      return const CameraState(
+        errorMessage: 'Camera permission denied. Please enable it in Settings.',
+      );
+    }
+
     // Discover available cameras.
-    final cameras = await availableCameras();
+    List<CameraDescription> cameras;
+    try {
+      cameras = await availableCameras();
+    } catch (e) {
+      return CameraState(errorMessage: 'Could not access cameras: $e');
+    }
+
     if (cameras.isEmpty) {
-      return const CameraState(errorMessage: 'No cameras available');
+      return const CameraState(errorMessage: 'No cameras found on this device');
     }
 
     // Use the first back-facing camera.
@@ -60,15 +76,19 @@ class CameraNotifier extends AsyncNotifier<CameraState> {
       orElse: () => cameras.first,
     );
 
-    // Initialize controller with high resolution for OCR quality.
+    // Initialize controller with medium resolution (more compatible).
     _controller = CameraController(
       backCamera,
-      ResolutionPreset.high,
+      ResolutionPreset.medium,
       imageFormatGroup: ImageFormatGroup.jpeg,
       enableAudio: false,
     );
 
-    await _controller!.initialize();
+    try {
+      await _controller!.initialize();
+    } catch (e) {
+      return CameraState(errorMessage: 'Camera initialization failed: $e');
+    }
 
     // Ensure controller is disposed when the provider is disposed.
     ref.onDispose(() {
@@ -88,9 +108,13 @@ class CameraNotifier extends AsyncNotifier<CameraState> {
     if (current?.controller == null || !current!.isInitialized) return;
 
     final newFlashState = !current.isFlashOn;
-    await _controller!.setFlashMode(
-      newFlashState ? FlashMode.torch : FlashMode.off,
-    );
+    try {
+      await _controller!.setFlashMode(
+        newFlashState ? FlashMode.torch : FlashMode.off,
+      );
+    } catch (_) {
+      // Some devices don't support torch; silently ignore.
+    }
 
     state = AsyncData(current.copyWith(isFlashOn: newFlashState));
   }

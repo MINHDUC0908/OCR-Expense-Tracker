@@ -114,7 +114,7 @@ class _WeeklyBarChartState extends State<WeeklyBarChart>
                   ],
                 )
               : Text(
-                  'Tap a bar to inspect day total',
+                  'Chạm vào cột để xem chi tiết ngày',
                   style: AppTextStyles.bodySmall.copyWith(fontSize: 11),
                 ),
         ),

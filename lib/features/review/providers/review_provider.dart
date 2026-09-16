@@ -1,6 +1,3 @@
-// lib/features/review/providers/review_provider.dart
-// State management for reviewing and editing OCR-extracted receipt data.
-
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;

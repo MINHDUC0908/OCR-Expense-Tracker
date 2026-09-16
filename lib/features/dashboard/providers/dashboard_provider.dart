@@ -53,7 +53,6 @@ class DashboardNotifier extends AsyncNotifier<DashboardData> {
     // Build 7-day Bar chart points (Mon to Sun of current week)
     final weekDays = DateFormatter.currentWeekDays();
     final weeklyData = weekDays.map((day) {
-      final key = DateTime(day.year, day.month, day.day);
       // Find matches on that day
       double amount = 0.0;
       for (final entry in dailyTotals.entries) {

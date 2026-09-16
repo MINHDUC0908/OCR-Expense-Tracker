@@ -25,7 +25,7 @@ class FilterBar extends StatelessWidget {
         TextField(
           onChanged: onSearchChanged,
           decoration: InputDecoration(
-            hintText: 'Search merchant or amount...',
+            hintText: 'Tìm kiếm cửa hàng hoặc số tiền...',
             prefixIcon: const Icon(Icons.search_rounded, size: 20, color: AppColors.textSecondary),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             filled: true,
@@ -46,7 +46,7 @@ class FilterBar extends StatelessWidget {
             children: [
               // "All" filter chip
               ChoiceChip(
-                label: const Text('All'),
+                label: const Text('Tất cả'),
                 selected: selectedCategory == null,
                 selectedColor: AppColors.primaryContainer,
                 side: BorderSide(
