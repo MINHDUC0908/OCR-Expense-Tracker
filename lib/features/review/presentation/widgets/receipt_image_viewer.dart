@@ -7,12 +7,14 @@ class ReceiptImageViewer extends StatefulWidget {
   final String imagePath;
   final String rawText;
   final double confidence;
+  final int processingTimeMs;
 
   const ReceiptImageViewer({
     super.key,
     required this.imagePath,
     required this.rawText,
     required this.confidence,
+    this.processingTimeMs = 0,
   });
 
   @override
@@ -30,12 +32,13 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
 
     return Card(
       clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header with confidence indicator and Raw Text toggle
+          // Header with confidence indicator, speed badge, and Raw Text toggle
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             color: AppColors.surfaceVariant,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,21 +51,40 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                           : (widget.confidence > 0.3
                               ? Icons.info_rounded
                               : Icons.warning_amber_rounded),
-                      size: 18,
+                      size: 15,
                       color: widget.confidence >= 0.66
                           ? AppColors.success
                           : (widget.confidence > 0.3
                               ? AppColors.warning
                               : AppColors.error),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Text(
-                      'Độ tin cậy OCR: ${(widget.confidence * 100).toInt()}%',
+                      'OCR: ${(widget.confidence * 100).toInt()}%',
                       style: AppTextStyles.labelSmall.copyWith(
                         color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11,
                       ),
                     ),
+                    if (widget.processingTimeMs > 0) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryContainer,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '⚡ ${widget.processingTimeMs}ms (offline)',
+                          style: TextStyle(
+                            fontSize: 9.5,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 TextButton.icon(
@@ -73,9 +95,12 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                   },
                   icon: Icon(
                     _showRawText ? Icons.image_rounded : Icons.text_snippet_rounded,
-                    size: 16,
+                    size: 14,
                   ),
-                  label: Text(_showRawText ? 'Xem ảnh' : 'Văn bản OCR'),
+                  label: Text(
+                    _showRawText ? 'Xem ảnh' : 'Văn bản OCR',
+                    style: const TextStyle(fontSize: 11),
+                  ),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     minimumSize: Size.zero,
@@ -88,13 +113,13 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
 
           // Main View: Image or Extracted Raw Text
           AnimatedCrossFade(
-            duration: const Duration(milliseconds: 250),
+            duration: const Duration(milliseconds: 200),
             crossFadeState: _showRawText
                 ? CrossFadeState.showSecond
                 : CrossFadeState.showFirst,
             firstChild: hasValidFile
                 ? Container(
-                    height: 220,
+                    height: 200,
                     width: double.infinity,
                     color: Colors.black,
                     child: InteractiveViewer(
@@ -106,13 +131,13 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                     ),
                   )
                 : Container(
-                    height: 160,
+                    height: 140,
                     color: AppColors.surfaceVariant,
                     alignment: Alignment.center,
-                    child: const Text('Không có ảnh xem trước'),
+                    child: Text('Không có ảnh xem trước', style: AppTextStyles.bodySmall),
                   ),
             secondChild: Container(
-              height: 220,
+              height: 200,
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               color: AppColors.background,
@@ -123,9 +148,9 @@ class _ReceiptImageViewerState extends State<ReceiptImageViewer> {
                       : 'Không nhận diện được văn bản nào từ ảnh này.',
                   style: const TextStyle(
                     fontFamily: 'monospace',
-                    fontSize: 12,
+                    fontSize: 11,
                     color: AppColors.textSecondary,
-                    height: 1.4,
+                    height: 1.35,
                   ),
                 ),
               ),

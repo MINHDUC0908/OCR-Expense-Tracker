@@ -154,6 +154,11 @@ class HistoryNotifier extends AsyncNotifier<HistoryState> {
     ));
   }
 
+  Future<void> addTransaction(ExpenseTransaction tx) async {
+    await _repository.insert(tx);
+    await refresh();
+  }
+
   Future<void> refresh() async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() => _loadState(state.valueOrNull?.filter ?? const HistoryFilter()));

@@ -1,5 +1,5 @@
 // lib/features/dashboard/presentation/dashboard_screen.dart
-// Màn hình Tổng Quan — giao diện tươi sáng với tiếng Việt
+// Màn hình Tổng Quan — giao diện tươi sáng với font chữ nhỏ gọn, cân đối và thanh lịch.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,24 +32,24 @@ class DashboardScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
                     color: AppColors.primaryContainer,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.error_outline_rounded,
-                      color: AppColors.error, size: 40),
+                      color: AppColors.error, size: 32),
                 ),
-                const SizedBox(height: 16),
-                Text('Không tải được dữ liệu', style: AppTextStyles.headlineSmall),
-                const SizedBox(height: 6),
+                const SizedBox(height: 12),
+                Text('Không tải được dữ liệu', style: AppTextStyles.titleMedium),
+                const SizedBox(height: 4),
                 Text(error.toString(),
                     style: AppTextStyles.bodySmall, textAlign: TextAlign.center),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
                 ElevatedButton.icon(
                   onPressed: () => ref.read(dashboardProvider.notifier).refresh(),
-                  icon: const Icon(Icons.refresh_rounded),
-                  label: const Text('Thử lại'),
+                  icon: const Icon(Icons.refresh_rounded, size: 16),
+                  label: const Text('Thử lại', style: TextStyle(fontSize: 12)),
                 ),
               ],
             ),
@@ -60,9 +60,9 @@ class DashboardScreen extends ConsumerWidget {
           onRefresh: () => ref.read(dashboardProvider.notifier).refresh(),
           child: CustomScrollView(
             slivers: [
-              // ── App Bar với gradient ──
+              // ── App Bar với gradient nhỏ gọn cân đối ──
               SliverAppBar(
-                expandedHeight: 200,
+                expandedHeight: 160,
                 pinned: true,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
@@ -73,7 +73,7 @@ class DashboardScreen extends ConsumerWidget {
                     ),
                     child: SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                        padding: const EdgeInsets.fromLTRB(16, 6, 16, 14),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -85,40 +85,46 @@ class DashboardScreen extends ConsumerWidget {
                                   children: [
                                     Text(
                                       'Xin chào! 👋',
-                                      style: AppTextStyles.bodyMedium.copyWith(
-                                        color: Colors.white70,
+                                      style: TextStyle(
+                                        color: Colors.white.withValues(alpha: 0.85),
+                                        fontSize: 11.5,
                                       ),
                                     ),
-                                    const SizedBox(height: 2),
-                                    Text(
+                                    const SizedBox(height: 1),
+                                    const Text(
                                       'Quản lý chi tiêu',
-                                      style: AppTextStyles.headlineMedium.copyWith(
+                                      style: TextStyle(
                                         color: Colors.white,
-                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                   ],
                                 ),
                                 IconButton(
                                   onPressed: () => ref.read(dashboardProvider.notifier).refresh(),
-                                  icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+                                  icon: const Icon(Icons.refresh_rounded, color: Colors.white, size: 20),
+                                  tooltip: 'Làm mới',
                                 ),
                               ],
                             ),
                             const Spacer(),
                             // Tổng chi tiêu nổi bật
                             Text(
-                              'Tổng chi tiêu',
-                              style: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
+                              'Tổng chi tiêu tích lũy',
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.8),
+                                fontSize: 10.5,
+                              ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: 2),
                             Text(
                               CurrencyFormatter.formatVnd(data.grandTotal),
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 32,
+                                fontSize: 24,
                                 fontWeight: FontWeight.w900,
-                                letterSpacing: -0.5,
+                                letterSpacing: -0.3,
                               ),
                             ),
                           ],
@@ -127,20 +133,16 @@ class DashboardScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                title: const Text(
-                  'Tổng Quan',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-                ),
                 leading: const SizedBox(),
               ),
 
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // ── 3 thẻ thống kê nhanh ──
+                      // ── 2 thẻ thống kê nhanh ──
                       Row(
                         children: [
                           Expanded(
@@ -151,11 +153,11 @@ class DashboardScreen extends ConsumerWidget {
                               gradient: AppColors.blueGradient,
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: _StatCard(
-                              label: 'Giao dịch',
-                              value: '${data.count} lần',
+                              label: 'Tổng hóa đơn',
+                              value: '${data.count} mục',
                               icon: Icons.receipt_long_rounded,
                               gradient: AppColors.greenGradient,
                             ),
@@ -163,71 +165,71 @@ class DashboardScreen extends ConsumerWidget {
                         ],
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
 
                       // ── Biểu đồ tròn theo danh mục ──
-                      _SectionHeader(
-                        title: 'Chi tiêu theo danh mục',
+                      const _SectionHeader(
+                        title: 'Phân bổ theo danh mục',
                         icon: Icons.pie_chart_rounded,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+                              color: AppColors.primary.withValues(alpha: 0.05),
+                              blurRadius: 12,
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         child: DonutChart(
                           data: data.categoryData,
                           totalAmount: data.grandTotal,
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
 
                       // ── Biểu đồ cột tuần này ──
-                      _SectionHeader(
+                      const _SectionHeader(
                         title: 'Chi tiêu tuần này',
                         icon: Icons.bar_chart_rounded,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           color: AppColors.surface,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: AppColors.border.withValues(alpha: 0.5)),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.secondary.withValues(alpha: 0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+                              color: AppColors.secondary.withValues(alpha: 0.05),
+                              blurRadius: 12,
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         child: WeeklyBarChart(weeklyData: data.weeklyData),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 18),
 
                       // ── Nút quét hóa đơn ──
                       Container(
                         decoration: BoxDecoration(
                           gradient: AppColors.primaryGradient,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.35),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
+                              color: AppColors.primary.withValues(alpha: 0.28),
+                              blurRadius: 14,
+                              offset: const Offset(0, 5),
                             ),
                           ],
                         ),
@@ -235,43 +237,43 @@ class DashboardScreen extends ConsumerWidget {
                           color: Colors.transparent,
                           child: InkWell(
                             onTap: () => context.push('/camera'),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(16),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
+                                  horizontal: 18, vertical: 14),
                               child: Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.all(12),
+                                    padding: const EdgeInsets.all(9),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.25),
-                                      borderRadius: BorderRadius.circular(14),
+                                      color: Colors.white.withValues(alpha: 0.22),
+                                      borderRadius: BorderRadius.circular(11),
                                     ),
                                     child: const Icon(
                                       Icons.document_scanner_rounded,
                                       color: Colors.white,
-                                      size: 28,
+                                      size: 22,
                                     ),
                                   ),
-                                  const SizedBox(width: 16),
+                                  const SizedBox(width: 14),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const Text(
-                                          'Quét hóa đơn mới',
+                                          'Quét hóa đơn mới (OCR)',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 16,
+                                            fontSize: 13.5,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
-                                          'Dùng camera hoặc thư viện ảnh',
+                                          'Tự động trích xuất tổng tiền, ngày, nơi bán',
                                           style: TextStyle(
-                                            color: Colors.white.withValues(alpha: 0.8),
-                                            fontSize: 12,
+                                            color: Colors.white.withValues(alpha: 0.85),
+                                            fontSize: 10.5,
                                           ),
                                         ),
                                       ],
@@ -280,7 +282,7 @@ class DashboardScreen extends ConsumerWidget {
                                   const Icon(
                                     Icons.arrow_forward_ios_rounded,
                                     color: Colors.white,
-                                    size: 18,
+                                    size: 14,
                                   ),
                                 ],
                               ),
@@ -289,7 +291,7 @@ class DashboardScreen extends ConsumerWidget {
                         ),
                       ),
 
-                      const SizedBox(height: 100),
+                      const SizedBox(height: 80),
                     ],
                   ),
                 ),
@@ -318,14 +320,14 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         gradient: gradient,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: gradient.colors.first.withValues(alpha: 0.3),
-            blurRadius: 12,
+            color: gradient.colors.first.withValues(alpha: 0.25),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
@@ -333,13 +335,13 @@ class _StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.white, size: 24),
-          const SizedBox(height: 12),
+          Icon(icon, color: Colors.white, size: 20),
+          const SizedBox(height: 8),
           Text(
             value,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -347,8 +349,8 @@ class _StatCard extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.85),
+              fontSize: 10.5,
             ),
           ),
         ],
@@ -368,18 +370,19 @@ class _SectionHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(6),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             color: AppColors.primaryContainer,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(7),
           ),
-          child: Icon(icon, color: AppColors.primary, size: 18),
+          child: Icon(icon, color: AppColors.primary, size: 15),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 8),
         Text(
           title,
-          style: AppTextStyles.titleMedium.copyWith(
+          style: AppTextStyles.titleSmall.copyWith(
             fontWeight: FontWeight.w700,
+            fontSize: 13,
             color: AppColors.textPrimary,
           ),
         ),

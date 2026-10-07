@@ -18,13 +18,13 @@ extension ExpenseCategoryExtension on ExpenseCategory {
   String get displayName {
     switch (this) {
       case ExpenseCategory.food:
-        return 'Ăn uống';
+        return 'Thực phẩm';
       case ExpenseCategory.study:
         return 'Học tập';
       case ExpenseCategory.travel:
-        return 'Đi lại';
+        return 'Du lịch';
       case ExpenseCategory.gear:
-        return 'Mua sắm';
+        return 'Thiết bị';
       case ExpenseCategory.entertainment:
         return 'Giải trí';
     }

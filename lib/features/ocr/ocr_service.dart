@@ -3,7 +3,7 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import '../../data/models/parsed_receipt.dart';
 import 'receipt_parser.dart';
 
-/// Orchestrates OCR processing: ML Kit recognition → ReceiptParser extraction.
+/// Dịch vụ xử lý OCR on-device với Google ML Kit + Regex heuristics.
 class OcrService {
   final TextRecognizer _recognizer;
   final ReceiptParser _parser;
@@ -12,54 +12,54 @@ class OcrService {
       : _recognizer = TextRecognizer(script: TextRecognitionScript.latin),
         _parser = ReceiptParser();
 
-  /// Processes the image at [imagePath] and returns a [ParsedReceipt].
-  ///
-  /// Throws [OcrException] if recognition fails.
+  /// Xử lý ảnh tại [imagePath] và trả về [ParsedReceipt] với thời gian đo đạc (ms).
   Future<ParsedReceipt> processImage(String imagePath) async {
     final file = File(imagePath);
     if (!await file.exists()) {
-      throw OcrException('Image file not found: $imagePath');
+      throw OcrException('Không tìm thấy tệp ảnh: $imagePath');
     }
 
     final inputImage = InputImage.fromFile(file);
 
     try {
+      final stopwatch = Stopwatch()..start();
       final recognized = await _recognizer.processImage(inputImage);
       final rawText = _buildRawText(recognized);
+      final parsed = _parser.parse(rawText);
+      stopwatch.stop();
+
+      final elapsedMs = stopwatch.elapsedMilliseconds;
 
       if (rawText.trim().isEmpty) {
-        return const ParsedReceipt(
+        return ParsedReceipt(
           rawText: '',
           confidence: 0.0,
+          processingTimeMs: elapsedMs,
         );
       }
 
-      return _parser.parse(rawText);
+      return parsed.copyWith(processingTimeMs: elapsedMs);
     } catch (e) {
-      throw OcrException('Text recognition failed: $e');
+      throw OcrException('Lỗi nhận dạng văn bản: $e');
     }
   }
 
-  /// Concatenates all recognized text blocks into a single string,
-  /// preserving line breaks for the parser.
   String _buildRawText(RecognizedText recognized) {
     final buffer = StringBuffer();
     for (final block in recognized.blocks) {
       for (final line in block.lines) {
         buffer.writeln(line.text);
       }
-      buffer.writeln(); // blank line between blocks
+      buffer.writeln();
     }
     return buffer.toString();
   }
 
-  /// Releases ML Kit resources. Must be called when the service is no longer needed.
   Future<void> dispose() async {
     await _recognizer.close();
   }
 }
 
-/// Thrown when OCR processing encounters an unrecoverable error.
 class OcrException implements Exception {
   final String message;
   const OcrException(this.message);

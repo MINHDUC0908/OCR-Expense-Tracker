@@ -90,9 +90,10 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                     imagePath: state.imagePath,
                     rawText: state.parsedReceipt?.rawText ?? '',
                     confidence: state.parsedReceipt?.confidence ?? 0.0,
+                    processingTimeMs: state.parsedReceipt?.processingTimeMs ?? 0,
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   // Nhập tổng tiền
                   EditableFieldCard(
@@ -106,8 +107,8 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                       keyboardType: TextInputType.number,
                       style: AppTextStyles.titleMedium.copyWith(
                         color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 18,
                       ),
                       decoration: const InputDecoration(
                         hintText: '0',

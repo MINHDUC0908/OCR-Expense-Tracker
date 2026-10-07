@@ -230,7 +230,7 @@ class _BarChartPainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: point.label,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 9.5,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           color: isSelected ? AppColors.primary : AppColors.textSecondary,
         ),

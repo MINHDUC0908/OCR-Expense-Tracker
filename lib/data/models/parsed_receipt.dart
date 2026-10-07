@@ -1,21 +1,13 @@
 // lib/data/models/parsed_receipt.dart
-// Represents the result of OCR + heuristic parsing of a receipt image.
+// Kết quả nhận dạng văn bản OCR và trích xuất regex từ hóa đơn.
 
 class ParsedReceipt {
-  /// The parsed monetary amount in VND. Null if parsing failed.
   final double? amount;
-
-  /// The parsed transaction date. Null if parsing failed.
   final DateTime? date;
-
-  /// The parsed merchant name. Null if parsing failed.
   final String? merchantName;
-
-  /// The raw OCR text returned by ML Kit.
   final String rawText;
-
-  /// Confidence score from 0.0 (nothing parsed) to 1.0 (all fields parsed).
   final double confidence;
+  final int processingTimeMs;
 
   const ParsedReceipt({
     this.amount,
@@ -23,15 +15,16 @@ class ParsedReceipt {
     this.merchantName,
     required this.rawText,
     required this.confidence,
+    this.processingTimeMs = 0,
   });
 
-  /// Returns a copy of this receipt with the given fields overridden.
   ParsedReceipt copyWith({
     double? amount,
     DateTime? date,
     String? merchantName,
     String? rawText,
     double? confidence,
+    int? processingTimeMs,
   }) {
     return ParsedReceipt(
       amount: amount ?? this.amount,
@@ -39,6 +32,7 @@ class ParsedReceipt {
       merchantName: merchantName ?? this.merchantName,
       rawText: rawText ?? this.rawText,
       confidence: confidence ?? this.confidence,
+      processingTimeMs: processingTimeMs ?? this.processingTimeMs,
     );
   }
 
@@ -48,6 +42,7 @@ class ParsedReceipt {
         'amount: $amount, '
         'date: $date, '
         'merchant: $merchantName, '
-        'confidence: ${(confidence * 100).toStringAsFixed(0)}%)';
+        'confidence: ${(confidence * 100).toStringAsFixed(0)}%, '
+        'time: ${processingTimeMs}ms)';
   }
 }

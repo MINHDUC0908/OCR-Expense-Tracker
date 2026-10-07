@@ -1,5 +1,5 @@
 // lib/features/settings/presentation/settings_screen.dart
-// Màn hình Cài đặt bằng tiếng Việt
+// Màn hình Cài đặt & Thông số kỹ thuật dự án bằng tiếng Việt.
 
 import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
@@ -14,117 +14,160 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
-        title: const Text('Cài đặt'),
+        elevation: 0,
+        title: Text(
+          'Cài đặt & Thông tin dự án',
+          style: AppTextStyles.headlineSmall.copyWith(
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+          ),
+        ),
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         children: [
-          // Header ứng dụng
+          // Header ứng dụng nhỏ gọn cân đối
           Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               gradient: AppColors.heroGradient,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(18),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: AppColors.primary.withValues(alpha: 0.25),
+                  blurRadius: 14,
+                  offset: const Offset(0, 6),
                 ),
               ],
             ),
-            child: Column(
+            child: Row(
               children: [
                 Container(
-                  width: 72,
-                  height: 72,
+                  width: 52,
+                  height: 52,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.25),
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   child: const Icon(
                     Icons.document_scanner_rounded,
                     color: Colors.white,
-                    size: 36,
+                    size: 28,
                   ),
                 ),
-                const SizedBox(height: 12),
-                const Text(
-                  'OCR Chi Tiêu',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Phiên bản 1.0.0 • ML Kit on-device',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    fontSize: 13,
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'OCR Quản Lý Chi Tiêu',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        'Dành cho Sinh viên & Thủ quỹ CLB',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          fontSize: 11.5,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Phiên bản 1.0.0 • ML Kit On-device',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.75),
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 28),
+          const SizedBox(height: 20),
 
-          // Phần OCR Engine
-          _SectionTitle(title: 'CÔNG NGHỆ OCR'),
+          // Tình huống vấn đề & giải pháp
+          _SectionTitle(title: 'TÌNH HUỐNG VẤN ĐỀ & MỤC TIÊU'),
           _InfoCard(
-            children: [
+            children: const [
               _InfoRow(
-                icon: Icons.bolt_rounded,
+                icon: Icons.lightbulb_outline_rounded,
                 iconColor: AppColors.primary,
-                title: 'Google ML Kit nhận diện chữ',
-                subtitle: 'Hoạt động offline, xử lý trên thiết bị, độ trễ thấp',
+                title: 'Hỗ trợ sinh viên & thủ quỹ',
+                subtitle: 'Giảm thiểu thời gian nhập hóa đơn siêu thị thủ công vào bảng tính, hạn chế sai sót số liệu.',
               ),
-              const _Divider(),
+              _Divider(),
               _InfoRow(
-                icon: Icons.language_rounded,
+                icon: Icons.speed_rounded,
                 iconColor: AppColors.secondary,
-                title: 'Ngôn ngữ hỗ trợ',
-                subtitle: 'Tiếng Việt & Tiếng Anh (hóa đơn Latin)',
+                title: 'Xử lý OCR On-device < 100ms',
+                subtitle: 'Google ML Kit quét trực tiếp trên chip điện thoại, không cần mạng, bảo mật và miễn phí 100%.',
               ),
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
 
-          // Danh mục chi tiêu
-          _SectionTitle(title: 'DANH MỤC CHI TIÊU'),
+          // Công nghệ & tính năng cốt lõi
+          _SectionTitle(title: 'THÔNG SỐ KỸ THUẬT CỐT LÕI'),
           _InfoCard(
-            children: [
-              _CategoryRow(emoji: '🍔', name: 'Ăn uống', desc: 'Bữa ăn, cà phê, nhà hàng'),
-              const _Divider(),
-              _CategoryRow(emoji: '📚', name: 'Học tập', desc: 'Sách, học phí, tài liệu'),
-              const _Divider(),
-              _CategoryRow(emoji: '✈️', name: 'Di chuyển', desc: 'Xăng, xe bus, taxi, máy bay'),
-              const _Divider(),
-              _CategoryRow(emoji: '🔧', name: 'Thiết bị', desc: 'Phần cứng, điện tử, dụng cụ'),
-              const _Divider(),
-              _CategoryRow(emoji: '🎬', name: 'Giải trí', desc: 'Phim, game, thư giãn'),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          // Lưu trữ
-          _SectionTitle(title: 'CƠ SỞ DỮ LIỆU'),
-          _InfoCard(
-            children: [
+            children: const [
+              _InfoRow(
+                icon: Icons.camera_alt_rounded,
+                iconColor: AppColors.accent,
+                title: 'Camera & Khung cắt thông minh',
+                subtitle: 'Live view, bật/tắt flash, chạm lấy nét, khung căn chỉnh A4 chuẩn hóa đơn.',
+              ),
+              _Divider(),
+              _InfoRow(
+                icon: Icons.rule_rounded,
+                iconColor: AppColors.success,
+                title: 'Regex trích xuất phỏng đoán',
+                subtitle: 'Tự động bóc tách: Tổng tiền (VND, đ), ngày tháng (DD/MM/YYYY), tên đơn vị bán.',
+              ),
+              _Divider(),
+              _InfoRow(
+                icon: Icons.draw_rounded,
+                iconColor: AppColors.catTravel,
+                title: 'CustomPainter Canvas Chart',
+                subtitle: 'Biểu đồ bánh vòng & cột vẽ mượt mà trực tiếp trên Canvas, không dùng thư viện ngoài.',
+              ),
+              _Divider(),
               _InfoRow(
                 icon: Icons.storage_rounded,
                 iconColor: AppColors.warning,
-                title: 'SQLite (sqflite)',
-                subtitle: 'Lưu trữ an toàn tại thư mục ứng dụng trên thiết bị',
+                title: 'Cơ sở dữ liệu SQLite cục bộ',
+                subtitle: 'Lưu trữ giao dịch lâu dài và sao lưu ảnh chụp biên lai vào bộ nhớ trong của ứng dụng.',
               ),
             ],
           ),
 
-          const SizedBox(height: 32),
+          const SizedBox(height: 18),
+
+          // 5 Danh mục chi tiêu theo quy chuẩn
+          _SectionTitle(title: '5 DANH MỤC CHI TIÊU QUY CHUẨN'),
+          _InfoCard(
+            children: const [
+              _CategoryRow(emoji: '🍔', name: 'Thực phẩm', desc: 'Ăn uống, siêu thị, cà phê, nhà hàng'),
+              _Divider(),
+              _CategoryRow(emoji: '📚', name: 'Học tập', desc: 'Sách vở, giáo trình, in ấn tài liệu, học phí'),
+              _Divider(),
+              _CategoryRow(emoji: '✈️', name: 'Du lịch', desc: 'Xăng xe, di chuyển, vé tàu xe, máy bay'),
+              _Divider(),
+              _CategoryRow(emoji: '🔧', name: 'Thiết bị', desc: 'Linh kiện, dụng cụ, đồ điện tử, thiết bị CLB'),
+              _Divider(),
+              _CategoryRow(emoji: '🎬', name: 'Giải trí', desc: 'Xem phim, sự kiện, thể thao, liên hoan CLB'),
+            ],
+          ),
+
+          const SizedBox(height: 30),
         ],
       ),
     );
@@ -138,13 +181,14 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 10),
+      padding: const EdgeInsets.only(left: 4, bottom: 8),
       child: Text(
         title,
         style: AppTextStyles.labelSmall.copyWith(
           color: AppColors.textSecondary,
           fontWeight: FontWeight.w700,
-          letterSpacing: 1.2,
+          letterSpacing: 0.8,
+          fontSize: 10.5,
         ),
       ),
     );
@@ -160,13 +204,13 @@ class _InfoCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 3),
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -180,7 +224,7 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Divider(height: 1, indent: 16, endIndent: 16);
+    return const Divider(height: 1, indent: 14, endIndent: 14);
   }
 }
 
@@ -199,19 +243,45 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: iconColor.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(icon, color: iconColor, size: 22),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: iconColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: iconColor, size: 18),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.titleSmall.copyWith(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 10.5,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      title: Text(title, style: AppTextStyles.titleSmall),
-      subtitle: Text(subtitle,
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
     );
   }
 }
@@ -229,20 +299,44 @@ class _CategoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(child: Text(emoji, style: const TextStyle(fontSize: 22))),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Row(
+        children: [
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceVariant,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(child: Text(emoji, style: const TextStyle(fontSize: 17))),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: AppTextStyles.titleSmall.copyWith(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 1),
+                Text(
+                  desc,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                    fontSize: 10.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      title: Text(name, style: AppTextStyles.titleSmall),
-      subtitle: Text(desc,
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
     );
   }
 }

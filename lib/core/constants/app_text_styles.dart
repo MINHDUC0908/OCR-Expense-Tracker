@@ -1,5 +1,5 @@
 // lib/core/constants/app_text_styles.dart
-// Unified typography using Material 3 text theme conventions.
+// Hệ thống typography tinh chỉnh nhỏ gọn, cân đối và thanh thoát cho mobile.
 
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
@@ -11,82 +11,82 @@ class AppTextStyles {
 
   static const TextStyle displayLarge = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 32,
+    fontSize: 22,
     fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.3,
   );
 
   static const TextStyle headlineMedium = TextStyle(
-    fontFamily: _fontFamily,
-    fontSize: 22,
-    fontWeight: FontWeight.w600,
-    color: AppColors.textPrimary,
-  );
-
-  static const TextStyle headlineSmall = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 18,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
+  static const TextStyle headlineSmall = TextStyle(
+    fontFamily: _fontFamily,
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
   static const TextStyle titleMedium = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
 
   static const TextStyle titleSmall = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 14,
+    fontSize: 12.5,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
   );
 
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 16,
+    fontSize: 13.5,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
   );
 
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
   );
 
   static const TextStyle bodySmall = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 12,
+    fontSize: 10.5,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
   );
 
   static const TextStyle labelLarge = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: FontWeight.w600,
     color: AppColors.primary,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   );
 
   static const TextStyle labelSmall = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 11,
-    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
     color: AppColors.textDisabled,
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   );
 
   static const TextStyle amountLarge = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 28,
-    fontWeight: FontWeight.w700,
+    fontSize: 22,
+    fontWeight: FontWeight.w800,
     color: AppColors.primary,
-    letterSpacing: -0.5,
+    letterSpacing: -0.3,
   );
 }
